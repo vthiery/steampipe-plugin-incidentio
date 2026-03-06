@@ -1,6 +1,6 @@
 module github.com/vthiery/steampipe-plugin-incidentio
 
-go 1.26.1
+go 1.24
 
 require github.com/turbot/steampipe-plugin-sdk/v5 v5.10.4
 
