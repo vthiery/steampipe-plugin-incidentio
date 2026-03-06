@@ -10,13 +10,10 @@ Use SQL to query incidents, actions, alerts, escalations, schedules, custom fiel
 
 ### Install
 
-Clone the repository and build the plugin:
+Install the plugin with [Steampipe][https://steampipe.io]:
 
 ```sh
-git clone https://github.com/vthiery/steampipe-plugin-incidentio.git
-cd steampipe-plugin-incidentio
-mkdir -p ~/.steampipe/plugins/local/incidentio
-go build -o ~/.steampipe/plugins/local/incidentio/steampipe-plugin-incidentio.plugin .
+steampipe plugin install ghcr.io/vthiery/incidentio
 ```
 
 ### Configure
@@ -31,7 +28,7 @@ Edit `~/.steampipe/config/incidentio.spc`:
 
 ```hcl
 connection "incidentio" {
-  plugin  = "local/incidentio"
+  plugin  = "ghcr.io/vthiery/incidentio"
 
   # API key from your incident.io dashboard → Settings → API keys.
   # See https://docs.incident.io/api-reference/introduction for details.
@@ -86,6 +83,26 @@ where
 | [incidentio_custom_fields](incidentio/table_incidentio_custom_fields.go) | List custom field definitions configured in your account. |
 | [incidentio_escalations](incidentio/table_incidentio_escalations.go) | List escalations triggered in your account. |
 
+## Development
+
+### Prerequisites
+
+- [Steampipe](https://steampipe.io/downloads)
+- [Golang](https://golang.org/doc/install)
+
+### Build and Install
+
+```sh
+make install
+```
+
+Configure the plugin:
+
+```sh
+cp config/incidentio.spc ~/.steampipe/config/incidentio.spc
+vi ~/.steampipe/config/incidentio.spc
+```
+
 ## Testing
 
 Run a smoke query against every table:
@@ -96,42 +113,7 @@ make test
 
 The test script ([scripts/test_tables.sh](scripts/test_tables.sh)) builds the plugin, queries each table, and reports pass/fail/skip (scope-restricted tables are skipped rather than failed).
 
-## Developing
-
-Prerequisites:
-
-- [Steampipe](https://steampipe.io/downloads)
-- [Golang](https://golang.org/doc/install)
-
-Clone:
-
-```sh
-git clone https://github.com/vthiery/steampipe-plugin-incidentio.git
-cd steampipe-plugin-incidentio
-```
-
-Build and install:
-
-```sh
-mkdir -p ~/.steampipe/plugins/local/incidentio
-go build -o ~/.steampipe/plugins/local/incidentio/steampipe-plugin-incidentio.plugin .
-```
-
-Configure the plugin:
-
-```sh
-cp config/incidentio.spc ~/.steampipe/config/incidentio.spc
-vi ~/.steampipe/config/incidentio.spc
-```
-
-Try it:
-
-```shell
-steampipe query
-> .inspect incidentio
-```
-
-Further reading:
+### Further reading
 
 - [Writing plugins](https://steampipe.io/docs/develop/writing-plugins)
 - [incident.io API reference](https://docs.incident.io/api-reference/introduction)
