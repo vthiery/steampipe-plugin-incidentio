@@ -10,7 +10,7 @@ Use SQL to query incidents, actions, alerts, escalations, schedules, custom fiel
 
 ### Install
 
-Install the plugin with [Steampipe][https://steampipe.io]:
+Install the plugin with [Steampipe(https://steampipe.io):
 
 ```sh
 steampipe plugin install ghcr.io/vthiery/incidentio
