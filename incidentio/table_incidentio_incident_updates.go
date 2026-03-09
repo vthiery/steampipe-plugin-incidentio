@@ -2,6 +2,7 @@ package incidentio
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
@@ -83,6 +84,9 @@ func listIncidentUpdates(ctx context.Context, d *plugin.QueryData, h *plugin.Hyd
 
 		var result incidentUpdatesResponse
 		if err := client.get(ctx, "/v2/incident_updates", params, &result); err != nil {
+			if errors.Is(err, ErrNotFound) {
+				return nil, nil
+			}
 			return nil, fmt.Errorf("listing incident updates: %w", err)
 		}
 

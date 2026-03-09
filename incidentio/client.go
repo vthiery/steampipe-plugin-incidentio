@@ -3,6 +3,7 @@ package incidentio
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,6 +11,9 @@ import (
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 )
+
+// ErrNotFound is returned when the incident.io API responds with a 404.
+var ErrNotFound = errors.New("not found")
 
 const baseURL = "https://api.incident.io"
 
@@ -66,6 +70,9 @@ func (c *Client) get(ctx context.Context, path string, params map[string]string,
 		return fmt.Errorf("reading response body: %w", err)
 	}
 
+	if resp.StatusCode == http.StatusNotFound {
+		return ErrNotFound
+	}
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("incident.io API error: status=%d body=%s", resp.StatusCode, string(body))
 	}

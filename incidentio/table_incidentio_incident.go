@@ -2,6 +2,7 @@ package incidentio
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
@@ -211,6 +212,9 @@ func getIncident(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData
 
 	var result incidentResponse
 	if err := client.get(ctx, fmt.Sprintf("/v2/incidents/%s", id), nil, &result); err != nil {
+		if errors.Is(err, ErrNotFound) {
+			return nil, nil
+		}
 		return nil, fmt.Errorf("getting incident %s: %w", id, err)
 	}
 
